@@ -36,11 +36,37 @@ client.connect(err => {
             })
     })
 
-    app.get('/buses', (req, res)=>{
+    app.get('/buses', (req, res) => {
         busesCollection.find()
-        .toArray((err, documents)=>{
-            res.send(documents);
+            .toArray((err, documents) => {
+                res.send(documents);
+            })
+    })
+
+    app.patch('/bookedSit', (req, res) => {
+        const { id, bookedSit } = req.body;
+        busesCollection.updateOne({ _id: ObjectId(id) },
+            {
+                $set: { sits: bookedSit }
+            })
+            .then(result => {
+                res.send(result.modifiedCount > 0);
+            })
+            .catch(err => console.log(err));
+    })
+
+    app.patch('/makeAllAvailable', (req, res) => {
+        const bus = req.body.selectedBus;
+        const id = req.body.id;
+        const allSits = [true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true];
+        
+        busesCollection.updateOne({ _id: ObjectId(id) }, {
+            $set: { sits: allSits }
         })
+            .then(result => {
+                res.send(result.modifiedCount > 0);
+            })
+            .catch(err => console.log(err));
     })
 
 });
