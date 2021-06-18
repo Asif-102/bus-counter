@@ -1,35 +1,50 @@
 const express = require('express');
-const cors = require('cors');
-const ObjectID = require('mongodb').ObjectID;
 const bodyParser = require('body-parser');
-require('dotenv').config();
-
-const port = process.env.PORT || 4000;
+const cors = require('cors');
 
 const app = express();
+
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+require('dotenv').config()
+
+const user = process.env.DB_USER;
+const password = process.env.DB_PASS;
+const db = process.env.DB_NAME;
 
 const MongoClient = require('mongodb').MongoClient;
-
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.cf04q.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+const { ObjectId } = require('mongodb');
+const uri = `mongodb+srv://${user}:${password}@cluster0.wp8tr.mongodb.net/${db}?retryWrites=true&w=majority`;
 
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-
-app.get('/', (req, res) => {
-    res.send('welcome to node js api');
-})
-
-
 client.connect(err => {
-    const busCollection = client.db(`${process.env.DB_NAME}`).collection("bus");
-    
-    console.log('db connected');
 
+    const busesCollection = client.db(db).collection("bus");
+
+
+    app.get('/', (req, res) => {
+        res.send('Hello I am your new node js project');
+    })
+
+    app.post('/addBus', (req, res) => {
+        const bus = req.body;
+        busesCollection.insertOne(bus)
+            .then(result => {
+                res.send(result.insertedCount > 0)
+            })
+    })
+
+    app.get('/buses', (req, res)=>{
+        busesCollection.find()
+        .toArray((err, documents)=>{
+            res.send(documents);
+        })
+    })
 
 });
 
 
-app.listen(port, () => console.log(`Listenting to port at ${port}`));
+
+app.listen(process.env.PORT || 4000);
