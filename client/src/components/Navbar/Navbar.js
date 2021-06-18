@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 const Navbar = () => {
 
     const user = localStorage.getItem("userName");
+    // console.log(user);
 
     const history = useHistory();
 
@@ -22,7 +23,7 @@ const Navbar = () => {
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav ml-auto">
                         <li className="nav-item active">
-                            <a className="nav-link" href="/">Home <span className="sr-only">(current)</span></a>
+                            <a className="nav-link" href="/">Home <span className="sr-only">{user?`${user}`:''}</span></a>
                         </li>
                         <li className="nav-item active ml-5 mr-5">
                             {!user && <a className="nav-link" href="/login">Login</a>}

@@ -1,0 +1,33 @@
+.available-sit {
+    background-color: green;
+    padding: 10px;
+    margin: 40px;
+    color: white;
+    cursor: pointer;
+}
+
+.unavailable-sit {
+    background-color: lightgrey;
+    padding: 10px;
+    margin: 40px;
+    color: gray;
+    cursor: not-allowed;
+}
+
+@media (max-width:720px) {
+    .available-sit {
+        background-color: green;
+        padding: 5px;
+        margin: 1px;
+        color: white;
+        cursor: pointer;
+    }
+
+    .unavailable-sit {
+        background-color: lightgrey;
+        padding: 5px;
+        margin: 1px;
+        color: gray;
+        cursor: not-allowed;
+    }
+}
